@@ -1,8 +1,8 @@
 version: '3'
 services:
     php-fpm:
-        build:
-            image: laravel-sample_php-fpm
+        image: laravel-sample_php-fpm
+        build:    
             context: .
             dockerfile: ./php-fpm/Dockerfile
         #image: app:latest2
@@ -12,6 +12,7 @@ services:
             - ./source:/var/www/html
         working_dir: /var/www/html
     nginx:
+        image: nginx
         build:
             image: nginx
             context: .
