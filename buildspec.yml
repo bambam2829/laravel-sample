@@ -1,0 +1,45 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - aws --version
+      # 環境変数の設定
+      - ECR_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+      #- REPOSITORY_URI=${ECR_URI}/laravel-app
+      - IMAGE_REPO_NAME_WEB=${ECR_URI}/nginx
+      - IMAGE_REPO_NAME_APP=${ECR_URI}/laravel-sample_php-fpm
+      #- CONTAINER_NAME=demo-container
+      - CONTAINER_NAME_WEB=nginx
+      - CONTAINER_NAME_APP=laravel-sample_php-fpm
+      # コミットハッシュの先頭7桁をタグに利用する
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      # ECRログイン
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_URI
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker-compose build --no-cache
+      #- docker build -t nginx:latest .
+      - docker tag $CONTAINER_NAME_WEB:latest $IMAGE_REPO_NAME_WEB:$IMAGE_TAG
+      - docker tag $CONTAINER_NAME_WEB:latest $IMAGE_REPO_NAME_WEB:latest
+      #- docker build -t $CONTAINER_NAME_APP:latest .
+      - docker tag $CONTAINER_NAME_APP:latest $IMAGE_REPO_NAME_APP:$IMAGE_TAG
+      - docker tag $CONTAINER_NAME_APP:latest $IMAGE_REPO_NAME_APP:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push $IMAGE_REPO_NAME_WEB:latest
+      - docker push $IMAGE_REPO_NAME_WEB:$IMAGE_TAG
+      - docker push $IMAGE_REPO_NAME_APP:latest
+      - docker push $IMAGE_REPO_NAME_APP:$IMAGE_TAG
+      - echo Writing image definitions file...
+      - IMAGE_DIFINITION_WEB="{\"name\":\"web\",\"imageUri\":\"${IMAGE_REPO_NAME_WEB}:${IMAGE_TAG}\"}"
+      - IMAGE_DIFINITION_APP="{\"name\":\"app\",\"imageUri\":\"${IMAGE_REPO_NAME_APP}:${IMAGE_TAG}\"}"
+      - echo "[${IMAGE_DIFINITION_APP},${IMAGE_DIFINITION_WEB}]" > imagedefinitions.json
+      #- printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $IMAGE_REPO_NAME_WEB:$IMAGE_TAG > imagedefinitions.json
+artifacts:
+    files: imagedefinitions.json
