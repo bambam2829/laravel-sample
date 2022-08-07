@@ -2,6 +2,7 @@ version: '3'
 services:
     php-fpm:
         build:
+            image: laravel-sample_php-fpm
             context: .
             dockerfile: ./php-fpm/Dockerfile
         #image: app:latest2
@@ -12,6 +13,7 @@ services:
         working_dir: /var/www/html
     nginx:
         build:
+            image: nginx
             context: .
             dockerfile: ./nginx/Dockerfile
         depends_on:
