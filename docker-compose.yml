@@ -14,7 +14,6 @@ services:
     nginx:
         image: nginx
         build:
-            image: nginx
             context: .
             dockerfile: ./nginx/Dockerfile
         depends_on:
