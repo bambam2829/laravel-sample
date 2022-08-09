@@ -13,7 +13,7 @@ COPY ./php-fpm/php.ini /usr/local/etc/php/php.ini
 ARG TZ=Asia/Tokyo
 
 #composerインストール
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/var/www/html --filename=vendor
+RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
 # composer
