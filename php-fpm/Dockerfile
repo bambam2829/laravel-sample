@@ -16,14 +16,14 @@ ARG TZ=Asia/Tokyo
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
 
+#gitインストール
+RUN apt-get update
+RUN apt-get install -y git
+
 WORKDIR /var/www/html
 
 # composerインストール
 RUN composer install
-
-#gitインストール
-#RUN apt-get update
-#RUN apt-get install -y git
 
 RUN apt-get update && \
   apt-get -y install git unzip libzip-dev libicu-dev libonig-dev && \

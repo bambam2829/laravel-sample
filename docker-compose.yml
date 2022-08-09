@@ -10,7 +10,6 @@ services:
             - ./logs:/var/log/php
             - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
             - ./source:/var/www/html
-            - /var/www/html/vendor/
         working_dir: /var/www/html
     nginx:
         image: nginx
