@@ -2,6 +2,12 @@ FROM php:8.0-fpm-buster
 SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 #FROM php:7.2.10-fpm-alpine
 COPY ./source /var/www/html
+
+WORKDIR /var/www/html
+
+# composerインストール
+RUN composer install
+
 #pdoインストール
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
   COMPOSER_HOME=/composer
@@ -12,10 +18,6 @@ COPY ./php-fpm/php.ini /usr/local/etc/php/php.ini
 # timezone
 ARG TZ=Asia/Tokyo
 
-#composerインストール
-RUN curl -sS https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
-
 # composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
@@ -23,9 +25,6 @@ ENV COMPOSER_HOME /composer
 #gitインストール
 #RUN apt-get update
 #RUN apt-get install -y git
-
-
-WORKDIR /var/www/html
 
 RUN apt-get update && \
   apt-get -y install git unzip libzip-dev libicu-dev libonig-dev && \
