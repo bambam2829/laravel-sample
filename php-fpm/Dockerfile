@@ -5,9 +5,6 @@ COPY ./source /var/www/html
 
 WORKDIR /var/www/html
 
-# composerインストール
-RUN composer install
-
 #pdoインストール
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
   COMPOSER_HOME=/composer
@@ -21,6 +18,9 @@ ARG TZ=Asia/Tokyo
 # composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
+
+# composerインストール
+RUN composer install
 
 #gitインストール
 #RUN apt-get update
