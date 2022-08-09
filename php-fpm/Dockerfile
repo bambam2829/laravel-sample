@@ -3,9 +3,6 @@ SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 #FROM php:7.2.10-fpm-alpine
 COPY ./source /var/www/html
 
-WORKDIR /var/www/html
-
-#pdoインストール
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
   COMPOSER_HOME=/composer
 COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
@@ -18,6 +15,8 @@ ARG TZ=Asia/Tokyo
 # composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
+
+WORKDIR /var/www/html
 
 # composerインストール
 RUN composer install
