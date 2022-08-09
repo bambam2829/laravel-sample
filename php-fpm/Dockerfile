@@ -5,7 +5,7 @@ COPY ./source /var/www/html
 #pdoインストール
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
   COMPOSER_HOME=/composer
-  COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
 #RUN docker-php-ext-install pdo_mysql
 COPY ./php-fpm/php.ini /usr/local/etc/php/php.ini
 
@@ -13,10 +13,10 @@ COPY ./php-fpm/php.ini /usr/local/etc/php/php.ini
 ARG TZ=Asia/Tokyo
 
 #composerインストール
-RUN curl -sS https://getcomposer.org/installer | php
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/var/www/html --filename=vendor
 RUN mv composer.phar /usr/local/bin/composer
 
-# # composer
+# composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /composer
 
