@@ -13,12 +13,12 @@ COPY ./php-fpm/php.ini /usr/local/etc/php/php.ini
 ARG TZ=Asia/Tokyo
 
 #composerインストール
-#RUN curl -sS https://getcomposer.org/installer | php
-#RUN mv composer.phar /usr/local/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
 
 # # composer
-# ENV COMPOSER_ALLOW_SUPERUSER 1
-# ENV COMPOSER_HOME /composer
+ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV COMPOSER_HOME /composer
 
 #gitインストール
 #RUN apt-get update
