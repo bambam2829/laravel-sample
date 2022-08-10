@@ -23,7 +23,7 @@ RUN apt-get install -y git
 WORKDIR /var/www/html
 
 # composerインストール
-RUN composer install
+#RUN composer install
 
 RUN apt-get update && \
   apt-get -y install git unzip libzip-dev libicu-dev libonig-dev && \
